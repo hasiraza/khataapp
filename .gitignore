@@ -23,7 +23,7 @@ secrets.txt
 
 # PDFs and CSV data
 *.pdf
-src/*.csv
+
 
 # Virtual environments
 venv/
