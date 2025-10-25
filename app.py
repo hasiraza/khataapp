@@ -63,10 +63,17 @@ def send_email(receiver_email, pdf_path, person_name, total):
         server.login(sender_email, sender_password)
         server.send_message(msg)
 
+# Streamlit App UI
 st.set_page_config(page_title="Person Amount Tracker", page_icon="💰")
 st.title("💰 Person Amount Tracker App")
 
 person = st.selectbox("Select a Person", ["Ali", "Umer", "Haseeb", "Talha"])
+if person=='Ali':
+    email='alimaqbool0306@gmail.com'
+elif person=='Umer':
+    email='umarwattoo2828@gmail.com'
+elif person=='Haseeb':
+    email='hasiraza511@gmail.com'
 file_path = os.path.join(SRC_FOLDER, f"{person}.csv")
 
 if os.path.exists(file_path):
@@ -80,9 +87,9 @@ st.dataframe(df)
 
 amount = st.number_input("Enter Amount", min_value=0.0, step=1.0)
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
-# ADD AMOUNT
+# ➕ Add Amount
 with col1:
     if st.button("➕ Add Amount"):
         now = datetime.now()
@@ -91,7 +98,7 @@ with col1:
         df.to_csv(file_path, index=False)
         st.success(f"✅ Added {amount} for {person}")
 
-# SUBTRACT AMOUNT
+# ➖ Subtract Amount
 with col2:
     if st.button("➖ Subtract Amount"):
         now = datetime.now()
@@ -100,14 +107,17 @@ with col2:
         df.to_csv(file_path, index=False)
         st.warning(f"⚠️ Subtracted {amount} from {person}")
 
+# 🧹 Clear Data Button
+with col3:
+    if st.button("🧹 Clear Data"):
+        df = pd.DataFrame(columns=["Date", "Time", "Amount"])
+        df.to_csv(file_path, index=False)
+        st.error(f"🗑️ All data for {person} has been cleared!")
+
 total = df["Amount"].sum() if not df.empty else 0
 st.info(f"💵 Total Amount for {person}: {total}")
 
-email = st.selectbox('Select Email', [
-    'umarwatto02828@gmail.com',
-    'hasiraza511@gmail.com',
-    'alimaqbool0306@gmail.com'
-])
+
 
 if st.button("📤 Save & Send Email"):
     if not email:
