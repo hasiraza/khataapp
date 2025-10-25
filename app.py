@@ -64,7 +64,7 @@ def send_email(receiver_email, pdf_path, person_name, total):
         server.send_message(msg)
 
 st.set_page_config(page_title="Person Amount Tracker", page_icon="💰")
-st.title(" Person Amount Tracker App")
+st.title("💰 Person Amount Tracker App")
 
 person = st.selectbox("Select a Person", ["Ali", "Umer", "Haseeb", "Talha"])
 file_path = os.path.join(SRC_FOLDER, f"{person}.csv")
@@ -78,19 +78,36 @@ else:
 st.write(f"📋 {person}'s Current Data:")
 st.dataframe(df)
 
-amount = st.number_input("Enter Amount to Add", min_value=0.0, step=1.0)
+amount = st.number_input("Enter Amount", min_value=0.0, step=1.0)
 
-if st.button("➕ Add Amount"):
-    now = datetime.now()
-    new_row = {"Date": now.strftime("%Y-%m-%d"), "Time": now.strftime("%H:%M:%S"), "Amount": amount}
-    df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-    df.to_csv(file_path, index=False)
-    st.success(f"✅ Added {amount} for {person}")
+col1, col2 = st.columns(2)
+
+# ADD AMOUNT
+with col1:
+    if st.button("➕ Add Amount"):
+        now = datetime.now()
+        new_row = {"Date": now.strftime("%Y-%m-%d"), "Time": now.strftime("%H:%M:%S"), "Amount": amount}
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+        df.to_csv(file_path, index=False)
+        st.success(f"✅ Added {amount} for {person}")
+
+# SUBTRACT AMOUNT
+with col2:
+    if st.button("➖ Subtract Amount"):
+        now = datetime.now()
+        new_row = {"Date": now.strftime("%Y-%m-%d"), "Time": now.strftime("%H:%M:%S"), "Amount": -amount}
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+        df.to_csv(file_path, index=False)
+        st.warning(f"⚠️ Subtracted {amount} from {person}")
 
 total = df["Amount"].sum() if not df.empty else 0
 st.info(f"💵 Total Amount for {person}: {total}")
 
-email = st.selectbox('Select mail',['umarwatto02828@gmail.com','hasiraza511@gmail.com','alimaqbool0306@gmail.com'])
+email = st.selectbox('Select Email', [
+    'umarwatto02828@gmail.com',
+    'hasiraza511@gmail.com',
+    'alimaqbool0306@gmail.com'
+])
 
 if st.button("📤 Save & Send Email"):
     if not email:
