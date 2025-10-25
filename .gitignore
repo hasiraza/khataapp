@@ -1,0 +1,31 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Streamlit cache and logs
+.streamlit/
+logs/
+
+# Temporary and system files
+*.tmp
+*.log
+*.swp
+*.bak
+*.DS_Store
+Thumbs.db
+
+# Environment and credentials
+.env
+*.env
+secrets.txt
+
+# PDFs and CSV data
+*.pdf
+src/*.csv
+
+# Virtual environments
+venv/
+env/
+.venv/
